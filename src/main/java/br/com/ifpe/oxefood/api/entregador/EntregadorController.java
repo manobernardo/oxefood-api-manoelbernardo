@@ -26,4 +26,6 @@ public class EntregadorController {
        Entregador entregador = entregadorService.save(request.build());
        return new ResponseEntity<Entregador>(entregador, HttpStatus.CREATED);
    }
+
+   
 }
