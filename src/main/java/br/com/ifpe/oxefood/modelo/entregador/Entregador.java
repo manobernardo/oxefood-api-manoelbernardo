@@ -3,8 +3,6 @@ package br.com.ifpe.oxefood.modelo.entregador;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -78,7 +76,6 @@ public class Entregador extends EntidadeAuditavel{
     @Column
     private Boolean ativo;
 
-    public void setHabilitado(Boolean true1) {
-    }
+    
 }
     

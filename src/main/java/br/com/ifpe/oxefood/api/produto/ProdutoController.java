@@ -1,11 +1,13 @@
 package br.com.ifpe.oxefood.api.produto;
 
-import javax.validation.Valid;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,5 +29,20 @@ public class ProdutoController {
 
        Produto produto = produtoService.save(request.build());
        return new ResponseEntity<Produto>(produto, HttpStatus.CREATED);
+   }
+
+   @GetMapping
+    public List<Produto> findAll() {
+  
+        return produtoService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Produto obterPorID(@PathVariable Long id) {
+
+        return produtoService.findByID(id);
+
+
+
    }
 }
