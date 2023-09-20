@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ifpe.oxefood.api.cliente.ClienteRequest;
-import br.com.ifpe.oxefood.modelo.cliente.Cliente;
-import br.com.ifpe.oxefood.modelo.entregador.Entregador;
 import br.com.ifpe.oxefood.modelo.produto.Produto;
 import br.com.ifpe.oxefood.modelo.produto.ProdutoService;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/produto")
@@ -28,6 +27,7 @@ public class ProdutoController {
     @Autowired
    private ProdutoService produtoService;
 
+   @ApiOperation(value = "Serviço responsável por salvar um produto no sistema.")
    @PostMapping
    public ResponseEntity<Produto> save(@RequestBody ProdutoRequest request) {
 
@@ -35,22 +35,32 @@ public class ProdutoController {
        return new ResponseEntity<Produto>(produto, HttpStatus.CREATED);
    }
 
+   @ApiOperation(value = "Serviço responsável por listar um produto no sistema.")
    @GetMapping
     public List<Produto> findAll() {
   
         return produtoService.findAll();
     }
 
+    @ApiOperation(value = "Serviço responsável por listar por id um produto no sistema.")
     @GetMapping("/{id}")
     public Produto obterPorID(@PathVariable Long id) {
 
         return produtoService.findByID(id);
     }
 
+    @ApiOperation(value = "Serviço responsável por atualizar um produto no sistema.")
     @PutMapping("/{id}")
    public ResponseEntity<Produto> update(@PathVariable("id") Long id, @RequestBody ProdutoRequest request) {
 
        produtoService.update(id, request.build());
+       return ResponseEntity.ok().build();
+   }
+   @ApiOperation(value = "Serviço responsável por deletar um produto no sistema.")
+   @DeleteMapping("/{id}")
+   public ResponseEntity<Void> delete(@PathVariable Long id) {
+
+       produtoService.delete(id);
        return ResponseEntity.ok().build();
    }
 }
