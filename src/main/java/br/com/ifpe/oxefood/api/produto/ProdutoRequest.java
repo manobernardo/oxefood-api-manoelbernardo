@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class ProdutoRequest {
+
+    private Long idCategoria;
+
     private String codigo;
 
     private String titulo;
@@ -29,6 +32,7 @@ public class ProdutoRequest {
     public Produto build() {
 
         return Produto.builder()
+                
                 .codigo(codigo)
                 .titulo(titulo)
                 .descricao(descricao)

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.oxefood.modelo.produto.Produto;
 import br.com.ifpe.oxefood.modelo.produto.ProdutoService;
+import br.com.ifpe.oxefood.modelo.produto.categoriaProduto.CategoriaProdutoService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -24,15 +25,25 @@ import io.swagger.annotations.ApiOperation;
 @CrossOrigin
 
 public class ProdutoController {
+
     @Autowired
    private ProdutoService produtoService;
+
+   @Autowired
+   private CategoriaProdutoService categoriaProdutoService;
+
 
    @ApiOperation(value = "Serviço responsável por salvar um produto no sistema.")
    @PostMapping
    public ResponseEntity<Produto> save(@RequestBody ProdutoRequest request) {
 
-       Produto produto = produtoService.save(request.build());
-       return new ResponseEntity<Produto>(produto, HttpStatus.CREATED);
+    Produto produtoNovo = request.build();
+    produtoNovo.setCategoria(categoriaProdutoService.findByID(request.getIdCategoria()));
+    Produto produto = produtoService.save(produtoNovo);
+    return new ResponseEntity<Produto>(produto, HttpStatus.CREATED);
+
+       /*Produto produto = produtoService.save(request.build());
+       return new ResponseEntity<Produto>(produto, HttpStatus.CREATED);*/
    }
 
    @ApiOperation(value = "Serviço responsável por listar um produto no sistema.")
@@ -53,7 +64,11 @@ public class ProdutoController {
     @PutMapping("/{id}")
    public ResponseEntity<Produto> update(@PathVariable("id") Long id, @RequestBody ProdutoRequest request) {
 
-       produtoService.update(id, request.build());
+        Produto produto = request.build();
+       produto.setCategoria(categoriaProdutoService.findByID(request.getIdCategoria()));
+       produtoService.update(id, produto);
+
+       /*produtoService.update(id, request.build());*/
        return ResponseEntity.ok().build();
    }
    @ApiOperation(value = "Serviço responsável por deletar um produto no sistema.")
