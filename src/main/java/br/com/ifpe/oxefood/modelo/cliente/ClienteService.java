@@ -1,5 +1,6 @@
 package br.com.ifpe.oxefood.modelo.cliente;
 
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
 public class ClienteService {
     @Autowired
     private ClienteRepository repository;
+     @Autowired
+    private EnderecoClienteRepository enderecoRepository;
+    
 
     
 
@@ -68,7 +72,7 @@ public class ClienteService {
 
        endereco.setCliente(cliente);
        endereco.setHabilitado(Boolean.TRUE);
-       enderecoClienteRepository.save(endereco);
+       enderecoRepository.save(endereco);
       
        //Depois acrescenta o endereço criado ao cliente e atualiza o cliente:
 
@@ -88,7 +92,7 @@ public class ClienteService {
    @Transactional
    public EnderecoCliente atualizarEnderecoCliente(Long id, EnderecoCliente enderecoAlterado) {
 
-       EnderecoCliente endereco = enderecoClienteRepository.findById(id).get();
+       EnderecoCliente endereco = enderecoRepository.findById(id).get();
        endereco.setRua(enderecoAlterado.getRua());
        endereco.setNumero(enderecoAlterado.getNumero());
        endereco.setBairro(enderecoAlterado.getBairro());
@@ -97,20 +101,24 @@ public class ClienteService {
        endereco.setEstado(enderecoAlterado.getEstado());
        endereco.setComplemento(enderecoAlterado.getComplemento());
 
-       return enderecoClienteRepository.save(endereco);
+       return enderecoRepository.save(endereco);
    }
 
    @Transactional
    public void removerEnderecoCliente(Long id) {
 
-       EnderecoCliente endereco = enderecoClienteRepository.findById(id).get();
+       EnderecoCliente endereco = enderecoRepository.findById(id).get();
        endereco.setHabilitado(Boolean.FALSE);
-       enderecoClienteRepository.save(endereco);
+       enderecoRepository.save(endereco);
 
        Cliente cliente = this.findById(endereco.getCliente().getId());
        cliente.getEnderecos().remove(endereco);
        this.save(cliente);
    }
+
+        private Cliente findById(Long id) {
+             return null;
+}
 
 
 
