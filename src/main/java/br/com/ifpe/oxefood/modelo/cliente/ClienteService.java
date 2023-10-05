@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.oxefood.modelo.produto.Produto;
 import br.com.ifpe.oxefood.util.exception.EntidadeNaoEncontradaException;
 
 @Service
@@ -132,7 +133,17 @@ public class ClienteService {
              return null;
 }
 
+public List<Cliente> filtrar(String nome, String cpf) {
 
+        List<Cliente> listaClientes = repository.findAll();
+
+        if ((nome != null && !"".equals(nome))) {
+            listaClientes = repository.consultarPorNome(nome);
+        } else if ((cpf != null || "".equals(cpf))) {
+            listaClientes = repository.consultarPorCPF(cpf);
+        } 
+        return listaClientes;
+    }
 
 
 

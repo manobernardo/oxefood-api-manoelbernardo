@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.ifpe.oxefood.util.exception.ProdutoException;
 
-
 @Service
 public class ProdutoService {
     @Autowired
@@ -19,8 +18,8 @@ public class ProdutoService {
     public Produto save(Produto produto) {
 
         if (produto.getValorUnitario() < 10) {
-	    throw new ProdutoException(ProdutoException.MSG_VALOR_MINIMO_PRODUTO);
-	}
+            throw new ProdutoException(ProdutoException.MSG_VALOR_MINIMO_PRODUTO);
+        }
 
         produto.setHabilitado(Boolean.TRUE);
         produto.setVersao(1L);
@@ -29,7 +28,7 @@ public class ProdutoService {
     }
 
     public List<Produto> findAll() {
-  
+
         return repository.findAll();
     }
 
@@ -38,29 +37,60 @@ public class ProdutoService {
         return repository.findById(id).get();
     }
 
-     @Transactional
-   public void update(Long id, Produto produtoAlterado) {
+    @Transactional
+    public void update(Long id, Produto produtoAlterado) {
 
-      Produto produto = repository.findById(id).get();
-      produto.setCategoria(produtoAlterado.getCategoria());
-      produto.setCodigo(produtoAlterado.getCodigo());
-      produto.setTitulo(produtoAlterado.getTitulo());
-      produto.setDescricao(produtoAlterado.getDescricao());
-      produto.setValorUnitario(produtoAlterado.getValorUnitario());
-      produto.setTempoEntregaMinimo(produtoAlterado.getTempoEntregaMinimo());
-      produto.setTempoEntregaMaximo(produtoAlterado.getTempoEntregaMaximo());
-	    
-      produto.setVersao(produto.getVersao() + 1);
-      repository.save(produto);
-  }
+        Produto produto = repository.findById(id).get();
+        produto.setCategoria(produtoAlterado.getCategoria());
+        produto.setCodigo(produtoAlterado.getCodigo());
+        produto.setTitulo(produtoAlterado.getTitulo());
+        produto.setDescricao(produtoAlterado.getDescricao());
+        produto.setValorUnitario(produtoAlterado.getValorUnitario());
+        produto.setTempoEntregaMinimo(produtoAlterado.getTempoEntregaMinimo());
+        produto.setTempoEntregaMaximo(produtoAlterado.getTempoEntregaMaximo());
 
-  @Transactional
-   public void delete(Long id) {
+        produto.setVersao(produto.getVersao() + 1);
+        repository.save(produto);
+    }
 
-       Produto produto = repository.findById(id).get();
-       produto.setHabilitado(Boolean.FALSE);
-       produto.setVersao(produto.getVersao() + 1);
+    @Transactional
+    public void delete(Long id) {
 
-       repository.save(produto);
-   }
+        Produto produto = repository.findById(id).get();
+        produto.setHabilitado(Boolean.FALSE);
+        produto.setVersao(produto.getVersao() + 1);
+
+        repository.save(produto);
+    }
+
+    public List<Produto> filtrar(String codigo, String titulo, Long idCategoria) {
+
+        List<Produto> listaProdutos = repository.findAll();
+
+        if ((codigo != null && !"".equals(codigo)) &&
+                (titulo == null || "".equals(titulo)) &&
+                (idCategoria == null)) {
+            listaProdutos = repository.consultarPorCodigo(codigo);
+        } else if ((codigo == null || "".equals(codigo)) &&
+                (titulo != null && !"".equals(titulo)) &&
+                (idCategoria == null)) {
+            listaProdutos = repository.findByTituloContainingIgnoreCaseOrderByTituloAsc(titulo);
+        } else if ((codigo == null || "".equals(codigo)) &&
+                (titulo == null || "".equals(titulo)) &&
+                (idCategoria != null)) {
+            listaProdutos = repository.consultarPorCategoria(idCategoria);
+        } else if ((codigo == null || "".equals(codigo)) &&
+                (titulo != null && !"".equals(titulo)) &&
+                (idCategoria != null)) {
+            listaProdutos = repository.consultarPorTituloECategoria(titulo, idCategoria);
+        } else if ((codigo != null || "".equals(codigo)) &&
+                (titulo != null && !"".equals(titulo)) &&
+                (idCategoria != null)) {
+            listaProdutos = repository.consultarPorTituloCategoriaCodigo(titulo, idCategoria, codigo);
+        }
+
+        return listaProdutos;
+    }
+    
+
 }
