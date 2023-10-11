@@ -2,6 +2,7 @@ package br.com.ifpe.oxefood.api.cliente;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -25,6 +26,7 @@ public class ClienteRequest {
 
     @NotNull(message = "O Nome é de preenchimento obrigatório")
    @NotBlank(message = "O Nome é de preenchimento obrigatório")
+   
    @Length(max = 100, message = "O Nome deverá ter no máximo {max} caracteres")
 
     private String nome;
@@ -43,6 +45,9 @@ public class ClienteRequest {
 
     @Length(min = 8, max = 20, message = "O campo Fone fixo tem que ter entre {min} e {max} caracteres")
     private String foneFixo;
+    
+    @Email
+    private String email;
 
     public Cliente build() {
 
@@ -52,6 +57,7 @@ public class ClienteRequest {
                 .cpf(cpf)
                 .foneCelular(foneCelular)
                 .foneFixo(foneFixo)
+                .email(email)
                 .build();
     }
 
