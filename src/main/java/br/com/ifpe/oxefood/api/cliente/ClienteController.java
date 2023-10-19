@@ -35,7 +35,7 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<Cliente> save(@RequestBody @Valid ClienteRequest request) {
 
-        Cliente cliente = clienteService.save(request.build());
+        Cliente cliente = clienteService.save(request.buildCliente());
         return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
     }
 
@@ -57,7 +57,7 @@ public class ClienteController {
     @PutMapping("/{id}")
     public ResponseEntity<Cliente> update(@PathVariable("id") Long id, @Valid @RequestBody ClienteRequest request) {
 
-        clienteService.update(id, request.build());
+        clienteService.update(id, request.buildCliente());
         return ResponseEntity.ok().build();
     }
 

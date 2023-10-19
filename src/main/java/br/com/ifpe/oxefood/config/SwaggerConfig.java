@@ -1,4 +1,4 @@
-package br.com.ifpe.oxefood.api.config;
+package br.com.ifpe.oxefood.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -21,6 +21,8 @@ import lombok.Setter;
 
 public abstract class EntidadeNegocio implements Serializable {
 
+    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
